@@ -7,14 +7,11 @@ import {
   Patch,
   UseGuards,
 } from '@nestjs/common';
-import { Serialize } from 'src/utils/interceptors/serialize.interceptor';
-import { UpdateUserDto } from './dtos/update-user.dto';
-import { UserDto } from './dtos/user.dto';
-import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { UpdateUserDto } from './dtos/update-user.dto';
+import { UsersService } from './users.service';
 
 @UseGuards(AuthGuard)
-@Serialize(UserDto)
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -26,6 +23,16 @@ export class UsersController {
     if (!user) throw new NotFoundException('Usuário não encontrado');
 
     return user;
+  }
+
+  @Get('/:id/posts')
+  showUserPosts(@Param('id') id: string) {
+    return this.usersService.showUserPosts(parseInt(id));
+  }
+
+  @Get('/:id/comments')
+  showUserComments(@Param('id') id: string) {
+    return this.usersService.showUserComments(parseInt(id));
   }
 
   @Patch('/:id')

@@ -8,10 +8,29 @@ export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   findOne(id: number) {
-    return this.repo.findOne({
+    return this.repo.findOneBy({ id });
+  }
+
+  async showUserPosts(id: number) {
+    const user = await this.repo.findOne({
       where: { id },
       relations: { posts: true },
     });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+
+    return user.posts;
+  }
+
+  async showUserComments(id: number) {
+    const user = await this.repo.findOne({
+      where: { id },
+      relations: { comments: true },
+    });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+
+    return user.comments;
   }
 
   async update(id: number, attrs: Partial<User>) {

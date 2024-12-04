@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Req,
@@ -30,11 +29,11 @@ export class CommentsController {
 
   @Post('/:id')
   createComment(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Req() req,
     @Body() body: CreateCommentDto,
   ) {
-    return this.commentsService.create(id, body, req.user);
+    return this.commentsService.create(parseInt(id), body, req.user);
   }
 
   @Get('/:id')

@@ -8,7 +8,10 @@ export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   findOne(id: number) {
-    return this.repo.findOneBy({ id });
+    return this.repo.findOne({
+      where: { id },
+      relations: { posts: true },
+    });
   }
 
   async update(id: number, attrs: Partial<User>) {

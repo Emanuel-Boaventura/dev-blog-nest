@@ -11,8 +11,11 @@ export class PostsService {
     return this.repo.find();
   }
 
-  create(post: Partial<Post>) {
-    const newPost = this.repo.create(post);
+  create(post: Partial<Post>, user: any) {
+    const newPost = this.repo.create({
+      ...post,
+      user_id: user.id,
+    });
 
     return this.repo.save(newPost);
   }

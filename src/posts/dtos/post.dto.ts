@@ -9,4 +9,7 @@ export class PostDto {
 
   @Expose()
   description: string;
+
+  @Expose()
+  user_id: number;
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -27,8 +28,8 @@ export class PostsController {
   }
 
   @Post()
-  createUser(@Body() body: CreatePostDto) {
-    return this.postsService.create(body);
+  createPost(@Req() req, @Body() body: CreatePostDto) {
+    return this.postsService.create(body, req.user);
   }
 
   @Get('/:id')

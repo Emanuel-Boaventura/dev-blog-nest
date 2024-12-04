@@ -5,6 +5,8 @@ import {
   NotFoundException,
   Param,
   Patch,
+  Req,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -36,7 +38,14 @@ export class UsersController {
   }
 
   @Patch('/:id')
-  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+  updateUser(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() body: UpdateUserDto,
+  ) {
+    if (req.user.id !== parseInt(id))
+      throw new UnauthorizedException('Usuário não autorizado');
+
     return this.usersService.update(parseInt(id), body);
   }
 }

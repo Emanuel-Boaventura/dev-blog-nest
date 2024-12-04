@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { UserDto } from 'src/users/dtos/user.dto';
 import { Serialize } from 'src/utils/interceptors/serialize.interceptor';
+import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UserDto } from 'src/users/dtos/user.dto';
 
 @Serialize(UserDto)
 @Controller('auth')
@@ -11,11 +12,17 @@ export class AuthController {
 
   @Post('/signup')
   createUser(@Body() body: CreateUserDto) {
-    this.authService.create(body.name, body.email);
+    return this.authService.create(body.name, body.email);
   }
 
   @Post('/signin')
   signIn(@Body() body: CreateUserDto) {
     return this.authService.signIn(body.name, body.email);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/profile')
+  getProfileData(@Req() req) {
+    return req.user;
   }
 }

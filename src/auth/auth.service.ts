@@ -24,5 +24,9 @@ export class AuthService {
     return user;
   }
 
-  async validateToken(token: string) {}
+  validateToken(token: string) {
+    const email = token.split('-')[1];
+
+    return this.repo.findOne({ where: { email } });
+  }
 }

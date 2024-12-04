@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import { Comment } from './comment.entity';
+import { CommentDto } from './dtos/comment.dto';
 
 @Injectable()
 export class CommentsService {
@@ -12,7 +13,7 @@ export class CommentsService {
     return this.repo.find();
   }
 
-  create(postId: number, comment: Partial<Comment>, user: User) {
+  create(postId: number, comment: Partial<CommentDto>, user: User) {
     const newComment = this.repo.create({
       ...comment,
       post_id: postId,
@@ -30,7 +31,7 @@ export class CommentsService {
     return comment;
   }
 
-  async update(id: number, attrs: Partial<Comment>) {
+  async update(id: number, attrs: Partial<CommentDto>) {
     const newComment = await this.findOne(id);
 
     if (!newComment)

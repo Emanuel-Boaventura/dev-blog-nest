@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Serialize } from 'src/utils/interceptors/serialize.interceptor';
+import { ApiRequest } from 'src/utils/types';
 import { CommentsService } from './comments.service';
 import { CommentDto } from './dtos/comment.dto';
 import { CreateCommentDto } from './dtos/create-comment.dto';
@@ -30,7 +31,7 @@ export class CommentsController {
   @Post('/:id')
   createComment(
     @Param('id') id: string,
-    @Req() req,
+    @Req() req: ApiRequest,
     @Body() body: CreateCommentDto,
   ) {
     return this.commentsService.create(parseInt(id), body, req.user);

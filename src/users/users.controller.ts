@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { ApiRequest } from 'src/utils/types';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 
@@ -39,7 +40,7 @@ export class UsersController {
 
   @Patch('/:id')
   updateUser(
-    @Req() req: any,
+    @Req() req: ApiRequest,
     @Param('id') id: string,
     @Body() body: UpdateUserDto,
   ) {

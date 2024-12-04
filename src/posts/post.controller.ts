@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Serialize } from 'src/utils/interceptors/serialize.interceptor';
+import { ApiRequest } from 'src/utils/types';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { PostDto } from './dtos/post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
@@ -28,7 +29,7 @@ export class PostsController {
   }
 
   @Post()
-  createPost(@Req() req, @Body() body: CreatePostDto) {
+  createPost(@Req() req: ApiRequest, @Body() body: CreatePostDto) {
     return this.postsService.create(body, req.user);
   }
 
@@ -38,7 +39,7 @@ export class PostsController {
   }
 
   @Patch('/:id')
-  updatePost(@Param('id') id: string, @Body() body: UpdatePostDto) {
+  updatePost(@Param('id') id: string, @Body() body: Partial<UpdatePostDto>) {
     return this.postsService.update(parseInt(id), body);
   }
 

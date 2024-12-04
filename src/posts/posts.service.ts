@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
+import { CreatePostDto } from './dtos/create-post.dto';
+import { UpdatePostDto } from './dtos/update-post.dto';
 import { Post } from './posts.entity';
 
 @Injectable()
@@ -12,7 +14,7 @@ export class PostsService {
     return this.repo.find();
   }
 
-  create(post: Partial<Post>, user: User) {
+  create(post: Partial<CreatePostDto>, user: User) {
     const newPost = this.repo.create({
       ...post,
       user_id: user.id,
@@ -32,7 +34,7 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, attrs: Partial<Post>) {
+  async update(id: number, attrs: Partial<UpdatePostDto>) {
     const newPost = await this.findOne(id);
 
     if (!newPost)

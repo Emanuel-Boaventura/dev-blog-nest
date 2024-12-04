@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import { Comment } from './comment.entity';
 
@@ -11,8 +12,11 @@ export class CommentsService {
     return this.repo.find();
   }
 
-  create(comment: Partial<Comment>) {
-    const newComment = this.repo.create(comment);
+  create(postId: number, comment: Partial<Comment>, user: User) {
+    const newComment = this.repo.create({
+      ...comment,
+      post_id: postId,
+    });
 
     return this.repo.save(newComment);
   }

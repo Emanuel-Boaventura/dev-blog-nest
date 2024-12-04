@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
 
@@ -11,7 +12,7 @@ export class PostsService {
     return this.repo.find();
   }
 
-  create(post: Partial<Post>, user: any) {
+  create(post: Partial<Post>, user: User) {
     const newPost = this.repo.create({
       ...post,
       user_id: user.id,
@@ -21,7 +22,10 @@ export class PostsService {
   }
 
   async findOne(id: number) {
-    const post = await this.repo.findOneBy({ id });
+    const post = await this.repo.findOne({
+      where: { id },
+      relations: { comments: true },
+    });
 
     if (!post) throw new NotFoundException('Post não encontrado');
 

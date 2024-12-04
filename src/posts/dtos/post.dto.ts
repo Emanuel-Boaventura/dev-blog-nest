@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { CommentDto } from 'src/comments/dtos/comment.dto';
 
 export class PostDto {
   @Expose()
@@ -12,4 +13,8 @@ export class PostDto {
 
   @Expose()
   user_id: number;
+
+  @Expose()
+  @Type(() => CommentDto)
+  comments: CommentDto[];
 }

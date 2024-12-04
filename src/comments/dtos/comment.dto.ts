@@ -6,4 +6,7 @@ export class CommentDto {
 
   @Expose()
   description: string;
+
+  @Expose()
+  post_id: number;
 }

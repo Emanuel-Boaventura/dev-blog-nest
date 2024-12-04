@@ -4,15 +4,17 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Serialize } from 'src/utils/interceptors/serialize.interceptor';
 import { CommentsService } from './comments.service';
+import { CommentDto } from './dtos/comment.dto';
 import { CreateCommentDto } from './dtos/create-comment.dto';
-import { CommentDto } from './dtos/post.dto';
 import { UpdateCommentDto } from './dtos/update-comment.dto';
 
 @UseGuards(AuthGuard)
@@ -26,9 +28,13 @@ export class CommentsController {
     return this.commentsService.findAll();
   }
 
-  @Post()
-  createComment(@Body() body: CreateCommentDto) {
-    return this.commentsService.create(body);
+  @Post('/:id')
+  createComment(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() req,
+    @Body() body: CreateCommentDto,
+  ) {
+    return this.commentsService.create(id, body, req.user);
   }
 
   @Get('/:id')

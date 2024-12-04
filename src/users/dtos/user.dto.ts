@@ -1,4 +1,5 @@
 import { Expose, Type } from 'class-transformer';
+import { CommentDto } from 'src/comments/dtos/comment.dto';
 import { PostDto } from 'src/posts/dtos/post.dto';
 
 export class UserDto {
@@ -14,4 +15,8 @@ export class UserDto {
   @Expose()
   @Type(() => PostDto)
   posts: PostDto[];
+
+  @Expose()
+  @Type(() => CommentDto)
+  comments: CommentDto[];
 }

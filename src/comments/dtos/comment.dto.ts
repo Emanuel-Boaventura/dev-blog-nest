@@ -9,4 +9,7 @@ export class CommentDto {
 
   @Expose()
   post_id: number;
+
+  @Expose()
+  user_id: number;
 }

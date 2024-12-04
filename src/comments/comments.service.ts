@@ -16,6 +16,7 @@ export class CommentsService {
     const newComment = this.repo.create({
       ...comment,
       post_id: postId,
+      user_id: user.id,
     });
 
     return this.repo.save(newComment);

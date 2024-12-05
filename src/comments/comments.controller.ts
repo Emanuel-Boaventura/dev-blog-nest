@@ -43,12 +43,16 @@ export class CommentsController {
   }
 
   @Patch('/:id')
-  updateComment(@Param('id') id: string, @Body() body: UpdateCommentDto) {
-    return this.commentsService.update(parseInt(id), body);
+  updateComment(
+    @Req() req: ApiRequest,
+    @Param('id') id: string,
+    @Body() body: UpdateCommentDto,
+  ) {
+    return this.commentsService.update(parseInt(id), body, req.user);
   }
 
   @Delete('/:id')
-  removeComment(@Param('id') id: string) {
-    return this.commentsService.remove(parseInt(id));
+  removeComment(@Req() req: ApiRequest, @Param('id') id: string) {
+    return this.commentsService.remove(parseInt(id), req.user);
   }
 }

@@ -51,7 +51,7 @@ export class PostsService {
   }
 
   async remove(id: number, user: User) {
-    const post = await this.findOne(id);
+    const post = await this.repo.findOneBy({ id });
 
     if (!post) throw new NotFoundException('Post não encontrado');
 

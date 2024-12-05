@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
@@ -31,21 +35,27 @@ export class CommentsService {
     return comment;
   }
 
-  async update(id: number, attrs: Partial<CommentDto>) {
-    const newComment = await this.findOne(id);
-
-    if (!newComment)
-      throw new NotFoundException('Não foi possível atualizar o comentário.');
-
-    Object.assign(newComment, attrs);
-    return this.repo.save(newComment);
-  }
-
-  async remove(id: number) {
+  async update(id: number, attrs: Partial<CommentDto>, user: User) {
     const comment = await this.findOne(id);
 
-    if (!comment)
-      throw new NotFoundException('Não foi possível excluir o comentário.');
+    if (user.id !== comment.user_id)
+      throw new UnauthorizedException('Usuário não autorizado');
+
+    Object.assign(comment, attrs);
+    return this.repo.save(comment);
+  }
+
+  async remove(id: number, user: User) {
+    const comment = await this.repo.findOne({
+      where: { id },
+      relations: { post: true },
+    });
+
+    const isPostOwner = user.id === comment.post.user_id;
+    const isCommentOwner = user.id === comment.user_id;
+
+    if (!isPostOwner && !isCommentOwner)
+      throw new UnauthorizedException('Usuário não autorizado');
 
     return this.repo.remove(comment);
   }

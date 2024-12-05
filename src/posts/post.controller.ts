@@ -7,8 +7,11 @@ import {
   Patch,
   Post,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Serialize } from 'src/utils/interceptors/serialize.interceptor';
 import { ApiRequest } from 'src/utils/types';
@@ -29,8 +32,13 @@ export class PostsController {
   }
 
   @Post()
-  createPost(@Req() req: ApiRequest, @Body() body: CreatePostDto) {
-    return this.postsService.create(body, req.user);
+  @UseInterceptors(FileInterceptor('file'))
+  createPost(
+    @Req() req: ApiRequest,
+    @Body() body: CreatePostDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.postsService.create(body, req.user, file);
   }
 
   @Get('/:id')

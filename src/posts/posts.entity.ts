@@ -23,6 +23,9 @@ export class Post {
   @Column()
   user_id: number;
 
+  @Column({ nullable: true })
+  image_url: string;
+
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'user_id' })
   user: User;

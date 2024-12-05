@@ -12,6 +12,9 @@ export class PostDto {
   description: string;
 
   @Expose()
+  image_url: number;
+
+  @Expose()
   user_id: number;
 
   @Expose()

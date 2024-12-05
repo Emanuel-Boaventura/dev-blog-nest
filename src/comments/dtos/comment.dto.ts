@@ -17,8 +17,11 @@ export class CommentDto {
   user_id: number;
 
   @Expose()
+  deleted_by_owner: boolean | null;
+
+  @Expose()
   deleted_at: number | null;
 
   @Expose()
-  deleted_by_owner: boolean | null;
+  created_at: Date;
 }

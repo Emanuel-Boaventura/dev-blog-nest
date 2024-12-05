@@ -19,4 +19,7 @@ export class UserDto {
   @Expose()
   @Type(() => CommentDto)
   comments: CommentDto[];
+
+  @Expose()
+  created_at: Date;
 }

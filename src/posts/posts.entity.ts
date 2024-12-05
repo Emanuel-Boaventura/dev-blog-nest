@@ -2,6 +2,7 @@ import { Comment } from 'src/comments/comment.entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -32,4 +33,7 @@ export class Post {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @CreateDateColumn()
+  created_at: Date;
 }

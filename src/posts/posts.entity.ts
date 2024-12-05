@@ -1,3 +1,4 @@
+import { MaxLength } from 'class-validator';
 import { Comment } from 'src/comments/comment.entity';
 import { User } from 'src/users/user.entity';
 import {
@@ -16,9 +17,10 @@ export class Post {
   id: number;
 
   @Column()
+  @MaxLength(100)
   title: string;
 
-  @Column()
+  @Column({ type: 'text' })
   description: string;
 
   @Column()

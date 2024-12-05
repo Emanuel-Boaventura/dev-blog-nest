@@ -1,3 +1,4 @@
+import { MaxLength } from 'class-validator';
 import { Comment } from 'src/comments/comment.entity';
 import { Post } from 'src/posts/posts.entity';
 import {
@@ -14,9 +15,11 @@ export class User {
   id: number;
 
   @Column()
+  @MaxLength(100)
   name: string;
 
   @Column({ unique: true })
+  @MaxLength(191)
   email: string;
 
   @OneToMany(() => Post, (post) => post.user)

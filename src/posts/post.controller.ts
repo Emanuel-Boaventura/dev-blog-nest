@@ -47,12 +47,14 @@ export class PostsController {
   }
 
   @Patch('/:id')
+  @UseInterceptors(FileInterceptor('file'))
   updatePost(
     @Req() req: ApiRequest,
     @Param('id') id: string,
     @Body() body: Partial<UpdatePostDto>,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.postsService.update(parseInt(id), body, req.user);
+    return this.postsService.update(parseInt(id), body, req.user, file);
   }
 
   @Delete('/:id')

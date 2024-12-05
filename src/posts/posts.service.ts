@@ -47,7 +47,7 @@ export class PostsService {
   async findOne(id: number) {
     const post = await this.repo.findOne({
       where: { id },
-      relations: { comments: { user: true }, user: true },
+      relations: { user: true },
       withDeleted: true,
     });
 
@@ -56,7 +56,12 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, attrs: Partial<UpdatePostDto>, user: User) {
+  async update(
+    id: number,
+    attrs: Partial<UpdatePostDto>,
+    user: User,
+    file: Express.Multer.File,
+  ) {
     const post = await this.repo.findOneBy({ id });
 
     if (!post) throw new NotFoundException('Post não encontrado');
@@ -65,6 +70,12 @@ export class PostsService {
       throw new UnauthorizedException('Usuário não autorizado');
 
     Object.assign(post, attrs);
+
+    if (file) {
+      const imagePath = this.saveImage(file);
+      post.image_url = imagePath;
+    }
+
     return this.repo.save(post);
   }
 

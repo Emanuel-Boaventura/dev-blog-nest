@@ -16,6 +16,10 @@ import { Post } from './posts.entity';
 export class PostsService {
   constructor(@InjectRepository(Post) private repo: Repository<Post>) {}
 
+  findAll() {
+    return this.repo.find();
+  }
+
   private saveImage(file: Express.Multer.File): string {
     const uploadDir = join(__dirname, '..', '..', 'uploads');
     if (!existsSync(uploadDir)) {
@@ -25,11 +29,7 @@ export class PostsService {
     const fileName = `${timestamp}-${file.originalname}`;
     const uploadPath = join(uploadDir, fileName);
     writeFileSync(uploadPath, file.buffer);
-    return uploadPath;
-  }
-
-  findAll() {
-    return this.repo.find();
+    return `/uploads/${fileName}`;
   }
 
   create(post: Partial<CreatePostDto>, user: User, file: Express.Multer.File) {

@@ -3,13 +3,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { QueryFailedError, Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private repo: Repository<User>,
+    private jwtService: JwtService,
+  ) {}
 
   async create(name: string, email: string) {
     const user = this.repo.create({ name, email });
@@ -35,7 +39,13 @@ export class AuthService {
         'Não foi encontrado um usuário com essas credenciais.',
       );
 
-    return user;
+    return {
+      access_token: await this.jwtService.signAsync({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      }),
+    };
   }
 
   validateToken(token: string) {

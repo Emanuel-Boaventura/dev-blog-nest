@@ -1,12 +1,9 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { UserDto } from 'src/users/dtos/user.dto';
-import { Serialize } from 'src/utils/interceptors/serialize.interceptor';
 import { ApiRequest } from 'src/utils/types';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 
-@Serialize(UserDto)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

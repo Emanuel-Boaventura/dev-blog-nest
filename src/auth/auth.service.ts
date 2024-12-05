@@ -25,8 +25,8 @@ export class AuthService {
   }
 
   validateToken(token: string) {
-    const email = token.split('-')[1];
+    const id = token.split('-')[0];
 
-    return this.repo.findOne({ where: { email } });
+    return this.repo.findOne({ where: { id: parseInt(id) } });
   }
 }

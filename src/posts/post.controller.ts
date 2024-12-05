@@ -39,12 +39,16 @@ export class PostsController {
   }
 
   @Patch('/:id')
-  updatePost(@Param('id') id: string, @Body() body: Partial<UpdatePostDto>) {
-    return this.postsService.update(parseInt(id), body);
+  updatePost(
+    @Req() req: ApiRequest,
+    @Param('id') id: string,
+    @Body() body: Partial<UpdatePostDto>,
+  ) {
+    return this.postsService.update(parseInt(id), body, req.user);
   }
 
   @Delete('/:id')
-  removePost(@Param('id') id: string) {
-    return this.postsService.remove(parseInt(id));
+  removePost(@Req() req: ApiRequest, @Param('id') id: string) {
+    return this.postsService.remove(parseInt(id), req.user);
   }
 }

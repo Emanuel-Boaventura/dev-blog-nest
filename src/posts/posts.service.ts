@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
@@ -34,20 +38,27 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, attrs: Partial<UpdatePostDto>) {
-    const newPost = await this.findOne(id);
+  async update(id: number, attrs: Partial<UpdatePostDto>, user: User) {
+    const post = await this.repo.findOneBy({ id });
 
-    if (!newPost)
-      throw new NotFoundException('Não foi possível atualizar o post.');
+    if (!post) throw new NotFoundException('Post não encontrado');
 
-    Object.assign(newPost, attrs);
-    return this.repo.save(newPost);
+    if (user.id !== post.user_id)
+      throw new UnauthorizedException('Usuário não autorizado');
+
+    Object.assign(post, attrs);
+    return this.repo.save(post);
   }
 
-  async remove(id: number) {
+  async remove(id: number, user: User) {
     const post = await this.findOne(id);
 
-    if (!post) throw new NotFoundException('Não foi possível excluir o post.');
+    if (!post) throw new NotFoundException('Post não encontrado');
+
+    if (user.id !== post.user_id)
+      throw new UnauthorizedException('Usuário não autorizado');
+
+    if (!post) throw new NotFoundException('Não foi possível excluir o post');
 
     return this.repo.remove(post);
   }

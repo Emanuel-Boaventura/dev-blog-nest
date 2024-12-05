@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { User } from './user.entity';
 
@@ -40,6 +44,17 @@ export class UsersService {
     if (!user) throw new NotFoundException('user not found');
 
     Object.assign(user, attrs);
-    return this.repo.save(user);
+
+    try {
+      return await this.repo.save(user);
+    } catch (error) {
+      if (
+        error instanceof QueryFailedError &&
+        error.message.includes('UNIQUE constraint failed')
+      ) {
+        throw new ConflictException('Email já cadastrado');
+      }
+      throw error;
+    }
   }
 }

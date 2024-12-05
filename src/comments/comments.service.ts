@@ -14,8 +14,12 @@ import { UpdateCommentDto } from './dtos/update-comment.dto';
 export class CommentsService {
   constructor(@InjectRepository(Comment) private repo: Repository<Comment>) {}
 
-  findAll() {
-    return this.repo.find();
+  findAllPostComments(postId: number) {
+    return this.repo.find({
+      where: { post_id: postId },
+      relations: { user: true },
+      withDeleted: true,
+    });
   }
 
   create(postId: number, comment: CreateCommentDto, user: User) {

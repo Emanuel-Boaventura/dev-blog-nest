@@ -23,9 +23,9 @@ import { UpdateCommentDto } from './dtos/update-comment.dto';
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
+  @Get('/post/:id')
+  findAllPostComments(@Param('id') id: string) {
+    return this.commentsService.findAllPostComments(parseInt(id));
   }
 
   @Post('/:id')

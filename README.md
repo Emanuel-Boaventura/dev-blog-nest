@@ -4,9 +4,10 @@ Back-end do site DevBlog. Este projeto precisa rodar em conjunto com o [front-en
 
 ## Como rodar
 
+- Os projeto foi desenvolvido na versão 20.10.0 do node, recomendo utilizar a mesma para evitar conflitos.
 - Clone o repositório e instale as dependências com `npm install`.
-- Configure as variáveis de ambiente criando um arquivo `.env` com o secret do JWT.
-- Caso altere a porta do backend para algo além de `33333` altere também a porta no front-end no arquivo `next.config.ts` para carregar as imagens corretamente.
+- Não é preciso alterar o arquivo `.env`, caso o faça siga o padrão estabelecido.
+- Caso altere a porta do backend para algo além de `33333` altere também a porta no front-end no `.env` e no arquivo `next.config.ts` para comunicar corretamente com o front.
 - Existe já um banco db.sqlite que está levemente populado, mas caso queria testar com um banco novo só deletar o arquivo.
 - Rode `npm run start:dev` para iniciar o servidor em ambiente de desenvolvimento.
 

@@ -51,12 +51,17 @@ export class CommentsService {
       relations: { post: true },
     });
 
+    if (!comment) throw new NotFoundException('Comentário não encontrado');
+
     const isPostOwner = user.id === comment.post.user_id;
     const isCommentOwner = user.id === comment.user_id;
 
     if (!isPostOwner && !isCommentOwner)
       throw new UnauthorizedException('Usuário não autorizado');
 
-    return this.repo.remove(comment);
+    comment.deleted_by_owner = isCommentOwner;
+    await this.repo.save(comment);
+
+    return this.repo.softDelete({ id: comment.id });
   }
 }

@@ -2,6 +2,7 @@ import { Post } from 'src/posts/posts.entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -29,4 +30,10 @@ export class Comment {
   @ManyToOne(() => User, (user) => user.comments)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
+
+  @Column({ nullable: true })
+  deleted_by_owner: boolean;
 }

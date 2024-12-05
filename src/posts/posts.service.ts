@@ -48,6 +48,7 @@ export class PostsService {
     const post = await this.repo.findOne({
       where: { id },
       relations: { comments: true },
+      withDeleted: true,
     });
 
     if (!post) throw new NotFoundException('Post não encontrado');

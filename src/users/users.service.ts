@@ -19,12 +19,17 @@ export class UsersService {
   async showUserPosts(id: number) {
     const user = await this.repo.findOne({
       where: { id },
-      relations: { posts: true },
+      relations: { posts: { comments: true } },
     });
 
     if (!user) throw new NotFoundException('Usuário não encontrado');
 
-    return user.posts;
+    const posts = user.posts.map(({ comments, ...post }) => ({
+      ...post,
+      comments_quantity: comments.length,
+    }));
+
+    return posts;
   }
 
   async showUserComments(id: number) {

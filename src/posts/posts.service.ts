@@ -47,7 +47,7 @@ export class PostsService {
   async findOne(id: number) {
     const post = await this.repo.findOne({
       where: { id },
-      relations: { comments: true },
+      relations: { comments: { user: true }, user: true },
       withDeleted: true,
     });
 

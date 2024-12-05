@@ -1,8 +1,8 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
+import { UserDto } from 'src/users/dtos/user.dto';
 
 export class CommentDto {
   @Expose()
-  @Transform(({ obj }) => (obj.deleted_at ? null : obj.id))
   id: number;
 
   @Expose()
@@ -17,11 +17,16 @@ export class CommentDto {
   user_id: number;
 
   @Expose()
+  @Transform(({ obj }) => (obj.deleted_at ? null : obj.user))
+  @Type(() => UserDto)
+  user: UserDto[];
+
+  @Expose()
+  created_at: Date;
+
+  @Expose()
   deleted_by_owner: boolean | null;
 
   @Expose()
   deleted_at: number | null;
-
-  @Expose()
-  created_at: Date;
 }

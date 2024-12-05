@@ -7,7 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import { Comment } from './comment.entity';
-import { CommentDto } from './dtos/comment.dto';
+import { CreateCommentDto } from './dtos/create-comment.dto';
+import { UpdateCommentDto } from './dtos/update-comment.dto';
 
 @Injectable()
 export class CommentsService {
@@ -17,7 +18,7 @@ export class CommentsService {
     return this.repo.find();
   }
 
-  create(postId: number, comment: Partial<CommentDto>, user: User) {
+  create(postId: number, comment: CreateCommentDto, user: User) {
     const newComment = this.repo.create({
       ...comment,
       post_id: postId,
@@ -28,14 +29,17 @@ export class CommentsService {
   }
 
   async findOne(id: number) {
-    const comment = await this.repo.findOneBy({ id });
+    const comment = await this.repo.findOne({
+      where: { id },
+      relations: { user: true },
+    });
 
     if (!comment) throw new NotFoundException('Comentário não encontrado');
 
     return comment;
   }
 
-  async update(id: number, attrs: Partial<CommentDto>, user: User) {
+  async update(id: number, attrs: Partial<UpdateCommentDto>, user: User) {
     const comment = await this.findOne(id);
 
     if (user.id !== comment.user_id)
